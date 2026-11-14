@@ -9,4 +9,11 @@
     <File Path=".editorconfig" />
     <File Path="nuget.config" />
   </Folder>
+  <Project Path="Cedar/Cedar.csproj" Id="a4744cdc-ea53-4287-b768-5ed5ab9a5722" />
+  <Project Path="Pine/Pine.csproj" Id="d8585f6e-5330-4ac9-8d33-df19e5c9b557">
+    <Platform Solution="*|ARM64" Project="ARM64" />
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+    <Deploy />
+  </Project>
 </Solution>

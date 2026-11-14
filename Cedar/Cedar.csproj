@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.26100.0</TargetPlatformMinVersion>
+    <RootNamespace>Cedar</RootNamespace>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <Version>1.0.0-alpha.1</Version>
+    <Authors>Tayra Sakurai</Authors>
+    <Copyright>Copyright (C) 2026 Tayra Sakurai</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Tayra-Sakurai/Pine.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <NeutralLanguage>ja-JP</NeutralLanguage>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="11.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="11.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.29648.1000-preview" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.6-experimental" />
+  </ItemGroup>
+</Project>
