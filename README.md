@@ -1,8 +1,10 @@
-# README File Template
+# Pine
 
-Welcome to <!--Project Name-->!
+Welcome to Pine!
 
 This is an application software built with WinUI and Windows App SDK.
+
+You can manage your financial conditions privately with this application.
 
 ## Table of Contents
 
@@ -36,7 +38,7 @@ Your computer also must be supported for .NET 10 (istallation is not required).
 This application has a self-signed certification file.
 
 To install this App, please install the certification file into **your machine's trusted stores**.
-The certification file is on the [release page](https://github.com/Tayra-Sakurai/repo-name/releases) along with the MSIX installer.
+The certification file is on the [release page](https://github.com/Tayra-Sakurai/Pine/releases) along with the MSIX installer.
 
 ## Usage and Documentations
 
@@ -54,25 +56,11 @@ How to use feature 1...
 
 ## License and Liabilities
 
-<!--GPL Template-->
-<!--
-<one line to give the program's name and a brief idea of what it does.>
-Copyright &copy; <year> Tayra Sakurai
+This is an application to manage your financial status easily and privately.<br />
+Copyright &copy; 2026 Tayra Sakurai
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
--->
-<!--AGPL Template-->
-<!--
-<one line to give the program's name and a brief idea of what it does.>
-Copyright &copy; <year> Tayra Sakurai
-
-This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
--->
