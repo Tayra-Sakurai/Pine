@@ -8,6 +8,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <TabularControlsResources xmlns="using:Microsoft.UI.Xaml.Controls.Tabular" />
+                <XamlChartsResources xmlns="using:Microsoft.UI.Xaml.Controls.Charts" />
                 <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
             <!-- Other app resources here -->

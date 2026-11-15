@@ -12,11 +12,13 @@ namespace Cedar.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public DateTime DateTime { get; set; } = DateTime.Now;
-        public string Description { get; set; } = string.Empty;
+        public ICollection<ItemDetail> Details { get; } = new HashSet<ItemDetail>();
         public int SmallestCategoryId { get; set; }
         public SmallestCategory? SmallestCategory { get; set; }
         public double Amount { get; set; } = 0d;
         public int PaymentMethodId { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
+        public int StoreId { get; set; }
+        public Store? Store { get; set; }
     }
 }

@@ -10,9 +10,10 @@ namespace Cedar.Models
 {
     public class LargerCategory : Category
     {
-        public ObservableCollection<Category> Children { get; } = [];
+        public ObservableCollection<LargerCategory> LargerCategories { get; } = [];
+        public ObservableCollection<SmallestCategory> SmallestCategories { get; } = [];
         public int? ParentId { get; set; } = null;
         public LargerCategory? Parent { get; set; }
-        public double Total => Children.OfType<SmallestCategory>().Sum(sc => sc.TotalAmountMonthly) + Children.OfType<LargerCategory>().Sum(lc => lc.Total);
+        public double Total => SmallestCategories.Sum(sc => sc.TotalAmountMonthly) + LargerCategories.Sum(lc => lc.Total);
     }
 }
