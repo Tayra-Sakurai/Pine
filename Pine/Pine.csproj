@@ -103,5 +103,8 @@
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <DefaultLanguage>ja-JP</DefaultLanguage>
+    <PackageCertificateThumbprint>6FA6603D27CFDC086E39805A3BE146935CA06FF6</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>Pine_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
   </PropertyGroup>
 </Project>

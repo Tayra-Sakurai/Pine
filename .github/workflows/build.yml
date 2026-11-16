@@ -1,0 +1,86 @@
+name: Test and build the solution
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Please enter the release tag.
+        type: string
+        required: true
+      environment:
+        description: Select environment
+        type: environment
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Build the package
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 11.0.x
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v3
+
+      - name: Decode the .pfx
+        run: |
+          $pfx_bytes = [System.Convert]::FromBase64String("${{ secrets.PFX_CERT_KEY }}")
+          $certificatePath = "GitHubActionsWorkflow.pfx"
+          [IO.File]::WriteAllBytes("$certificatePath", $pfx_bytes)
+          [IO.File]::WriteAllBytes("Pine\$certificatePath", $pfx_bytes)
+
+      - name: Restore the package
+        run: msbuild Pine.slnx /t:Restore /p:Configuration=Release /p:SelfContained=true /p:Platform=x64 /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx
+
+      - name: Build the package
+        run: msbuild Pine.slnx /p:Configuration=Release /p:Platform=x64 /p:UapAppxPackageBuildMode=SideloadOnly /p:AppxBundle=Always /p:GenerateAppxPackageOnBuild=true /p:SelfContained=true /p:TargetFramework=net11.0-windows10.0.26100.0 /p:GenerateAppxInstallerFile=true /p:AppxPackageDir=Packages\ /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx
+
+      - name: Check out the folders.
+        run: tree .\ /f
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          path: |
+            Packages/**/*.msix
+            Packages/**/*.msixbundle
+            Packages/**/*.cer
+            Pine/Packages/**/*.msixbundle
+            Pine/Packages/**/*.cer
+          name: Packages
+
+  release:
+    runs-on: ubuntu-latest
+    name: Make a release
+    environment:
+      name: ${{ inputs.environment }}
+      deployment: false
+    needs: build
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v8
+        with:
+          path: Packages
+
+      - name: Make a release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ inputs.tag }}
+          files: |
+            Packages/**/*.msixbundle
+            Packages/**/*.msix
+            Packages/**/*.cer
+          make_latest: true
+          generate_release_notes: true
+          draft: true

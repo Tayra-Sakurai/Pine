@@ -4,6 +4,7 @@
 using Cedar.Contexts;
 using Cedar.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -28,5 +29,40 @@ namespace Cedar.ViewModels
 
         [ObservableProperty]
         public partial Category? SelectedCategory { get; set; }
+
+        [RelayCommand(AllowConcurrentExecutions = false)]
+        public async Task LoadAsync()
+        {
+            using CedarContext context = await factory.CreateDbContextAsync();
+
+            ExpenseCategories.Clear();
+            IncomeCategories.Clear();
+
+            IAsyncEnumerable<LargerCategory> expenseCategories = context.LargerCategories
+                .Where(lc => !lc.IsIncome)
+                .Include(lc => lc.Parent)
+                .OrderBy(lc => lc.Name)
+                .ThenBy(lc => lc.Id)
+                .AsNoTracking()
+                .AsAsyncEnumerable();
+
+            await foreach (
+                LargerCategory expenseCategory in expenseCategories)
+                ExpenseCategories.Add(expenseCategory);
+
+            IAsyncEnumerable<LargerCategory> incomeCategories = context.LargerCategories
+                .Where(lc => lc.IsIncome)
+                .Include(lc => lc.Parent)
+                .OrderBy(lc => lc.Name)
+                .ThenBy(lc => lc.Id)
+                .AsNoTracking()
+                .AsAsyncEnumerable();
+
+            await foreach (
+                LargerCategory incomeCategory in incomeCategories)
+                IncomeCategories.Add(incomeCategory);
+
+            SelectedCategory = null;
+        }
     }
 }
