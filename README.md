@@ -27,7 +27,7 @@ Core features of this application are:
 ### System Requirements
 
 The operating system must be Windows 11 because this application uses Windows-specific features such as Windows App SDK and WinUI.
-Your computer also must be supported for .NET 10 (istallation is not required).
+Your computer also must be supported for .NET 11 (istallation is not required).
 
 - **Operating System**: Windows 11 22H2 or later
 
