@@ -16,47 +16,16 @@ permissions:
 
 jobs:
   build:
+    name: Build WinUI package
     runs-on: windows-latest
-    name: Build the package
-
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v7
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+      - name: Build WinUI package
+        uses: $/.github/workflows/build
         with:
-          dotnet-version: 11.0.x
-
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v3
-
-      - name: Decode the .pfx
-        run: |
-          $pfx_bytes = [System.Convert]::FromBase64String("${{ secrets.PFX_CERT_KEY }}")
-          $certificatePath = "GitHubActionsWorkflow.pfx"
-          [IO.File]::WriteAllBytes("$certificatePath", $pfx_bytes)
-          [IO.File]::WriteAllBytes("Pine\$certificatePath", $pfx_bytes)
-
-      - name: Restore the package
-        run: msbuild Pine.slnx /t:Restore /p:Configuration=Release /p:SelfContained=true /p:Platform=x64 /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx
-
-      - name: Build the package
-        run: msbuild Pine.slnx /p:Configuration=Release /p:Platform=x64 /p:UapAppxPackageBuildMode=SideloadOnly /p:AppxBundle=Always /p:GenerateAppxPackageOnBuild=true /p:SelfContained=true /p:TargetFramework=net11.0-windows10.0.26100.0 /p:GenerateAppxInstallerFile=true /p:AppxPackageDir=Packages\ /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx
-
-      - name: Check out the folders.
-        run: tree .\ /f
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v7
-        with:
-          path: |
-            Packages/**/*.msix
-            Packages/**/*.msixbundle
-            Packages/**/*.cer
-            Pine/Packages/**/*.msixbundle
-            Pine/Packages/**/*.cer
-          name: Packages
+          dotnet_version: 11.0.x
+          build_target: net11.0-windows10.0.26100.0
+          solution_name: Pine
+          cert-key: ${{ secrets.PFX_CERT_KEY }}
 
   release:
     runs-on: ubuntu-latest

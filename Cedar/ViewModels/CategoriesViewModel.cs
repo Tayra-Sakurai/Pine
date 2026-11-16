@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 using Cedar.Contexts;
+using Cedar.Messages;
 using Cedar.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -28,7 +30,7 @@ namespace Cedar.ViewModels
         public ObservableCollection<LargerCategory> IncomeCategories { get; }
 
         [ObservableProperty]
-        public partial Category? SelectedCategory { get; set; }
+        public partial LargerCategory? SelectedCategory { get; set; }
 
         [RelayCommand(AllowConcurrentExecutions = false)]
         public async Task LoadAsync()
@@ -63,6 +65,29 @@ namespace Cedar.ViewModels
                 IncomeCategories.Add(incomeCategory);
 
             SelectedCategory = null;
+        }
+
+        private static void AddItem(bool isIncome, LargerCategory? parent = null)
+        {
+            LargerCategory largerCategory = new()
+            {
+                IsIncome = isIncome,
+                ParentId = parent?.Id,
+            };
+
+            WeakReferenceMessenger.Default.Send(new LargerCategoryInvokedMessage(largerCategory));
+        }
+
+        [RelayCommand]
+        private void AddIncomeCategory()
+        {
+            AddItem(true, SelectedCategory);
+        }
+
+        [RelayCommand]
+        private void AddExpenseCategory()
+        {
+            AddItem(false, SelectedCategory);
         }
     }
 }

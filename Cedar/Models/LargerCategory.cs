@@ -10,7 +10,7 @@ namespace Cedar.Models
 {
     public class LargerCategory : Category
     {
-        public ObservableCollection<LargerCategory> LargerCategories { get; } = [];
+        public ICollection<LargerCategory> LargerCategories { get; } = new HashSet<LargerCategory>();
         public ObservableCollection<SmallestCategory> SmallestCategories { get; } = [];
         public int? ParentId { get; set; } = null;
         public LargerCategory? Parent { get; set; }

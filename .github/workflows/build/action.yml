@@ -1,0 +1,64 @@
+name: Build WinUI package
+description: Build the WinUI package
+
+inputs:
+  solution_name:
+    required: true
+    type: string
+  dotnet_version:
+    required: false
+    type: string
+    default: 10.0.x
+  build_target:
+    required: false
+    type: string
+    default: net10.0-windows10.0.26100.0
+  cert-key:
+    description: PFX private key
+    type: string
+    required: true
+  
+runs:
+  using: composite
+  steps:
+    - name: Check out the repository
+      uses: actions/checkout@v7
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: ${{ inputs.dotnet_version }}
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v3
+
+    - name: Decode the .pfx
+      shell: pwsh
+      run: |
+        $pfx_bytes = [System.Convert]::FromBase64String("${{ inputs.cert-key }}")
+        $certificatePath = "GitHubActionsWorkflow.pfx"
+        [IO.File]::WriteAllBytes("$certificatePath", $pfx_bytes)
+        [IO.File]::WriteAllBytes("${{ inputs.solution_name }}\$certificatePath", $pfx_bytes)
+
+    - name: Restore the package
+      shell: pwsh
+      run: msbuild ${{ inputs.solution_name }}.slnx /t:Restore /p:Configuration=Release /p:SelfContained=true /p:Platform=x64 /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx
+
+    - name: Build the package
+      shell: pwsh
+      run: msbuild ${{ inputs.solution_name }}.slnx /p:Configuration=Release /p:Platform=x64 /p:UapAppxPackageBuildMode=SideloadOnly /p:AppxBundle=Always /p:GenerateAppxPackageOnBuild=true /p:SelfContained=true /p:TargetFramework=${{ inputs.build_target }} /p:GenerateAppxInstallerFile=true /p:AppxPackageDir=Packages\ /p:PackageCertificateKeyFile=GitHubActionsWorkflow.pfx
+
+    - name: Check out the folders.
+      shell: pwsh
+      run: tree .\ /f
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v7
+      with:
+        path: |
+          Packages/**/*.msix
+          Packages/**/*.msixbundle
+          Packages/**/*.cer
+          Pine/Packages/**/*.msixbundle
+          Pine/Packages/**/*.cer
+        name: Packages
