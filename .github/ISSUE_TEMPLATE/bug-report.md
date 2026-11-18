@@ -1,20 +1,10 @@
 ---
 name: Bug Report
 about: Reporting a bug.
-assignees:
-  - Tayra-Sakurai
-labels:
-  - bug
 title: "[BUG]: "
+labels: bug
+assignees: Tayra-Sakurai
 type: Bug
-body:
-  - type: markdown
-    attributes:
-      value: "## Bug Report"
-  - type: markdown
-    attributes:
-      value: |
-        Thank you very much for taking the time to fill the template.
 
 ---
 
