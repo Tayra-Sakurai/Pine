@@ -20,5 +20,7 @@ namespace Cedar.Models
         public PaymentMethod? PaymentMethod { get; set; }
         public int StoreId { get; set; }
         public Store? Store { get; set; }
+        public double Income => Math.Max(Amount, 0d);
+        public double Expense => Math.Max(-Amount, 0d);
     }
 }

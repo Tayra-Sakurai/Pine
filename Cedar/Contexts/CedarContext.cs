@@ -30,7 +30,9 @@ namespace Cedar.Contexts
             modelBuilder.Entity<PaymentMethod>();
             modelBuilder.Entity<SmallestCategory>()
                 .HasBaseType<Category>();
-            modelBuilder.Entity<Store>();
+            modelBuilder.Entity<Store>()
+                .HasIndex(s => s.Name)
+                .IsUnique();
         }
     }
 }

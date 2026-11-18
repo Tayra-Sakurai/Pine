@@ -14,6 +14,5 @@ namespace Cedar.Models
         public string Name { get; set; } = string.Empty;
         public double Quantity { get; set; } = 0d;
         public int ItemId { get; set; }
-        public Item? Item { get; set; }
     }
 }

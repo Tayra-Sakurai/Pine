@@ -15,7 +15,7 @@ partial class CedarContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261115033402_InitialCreate";
+    public override string LastMigrationId => "20261118220912_SimplifyNavigation";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -115,6 +115,9 @@ partial class CedarContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
+                b.HasIndex("Name")
+                    .IsUnique();
+
                 b.ToTable("Stores");
             });
 
@@ -188,10 +191,8 @@ partial class CedarContextModelSnapshot : ModelSnapshot
 
                         b1.ToTable("ItemDetail");
 
-                        b1.WithOwner("Item")
+                        b1.WithOwner()
                             .HasForeignKey("ItemId");
-
-                        b1.Navigation("Item");
                     });
 
                 b.Navigation("Details");
