@@ -1,6 +1,11 @@
 ﻿// SPDX-FileCopyrighText: 2026 Tayra Sakurai
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+using Cedar.Contexts;
+using Cedar.Interceptors;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Data;
@@ -27,6 +32,8 @@ namespace Pine
         public App()
         {
             InitializeComponent();
+
+            Ioc.Default.ConfigureServices(ConfigureService());
         }
 
         /// <summary>
@@ -35,8 +42,23 @@ namespace Pine
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            Ioc.Default.GetRequiredService<IDbContextFactory<CedarContext>>().CreateDbContext().Database.Migrate();
+
             _window = new MainWindow();
             _window.Activate();
+        }
+
+        private static IServiceProvider ConfigureService()
+        {
+            ServiceCollection services = new();
+
+            services.AddSqliteVectorStore(_ => $"Data Source={Path.Join(Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder.Path, "history.sqlite3")}");
+            services.AddDbContextFactory<CedarContext>(
+                optionsBuilder => optionsBuilder.UseSqlite(
+                    $"Data Source={Path.Join(Microsoft.Windows.Storage.ApplicationData.GetDefault().LocalFolder.Path, "Cedar.sqlite3")}").AddInterceptors(
+                    new CedarContextInterceptor()));
+
+            return services.BuildServiceProvider();
         }
     }
 }
